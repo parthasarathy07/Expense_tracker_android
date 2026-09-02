@@ -5,7 +5,7 @@ import java.time.LocalDate
 
 object SampleExpenses {
 
-    val expenses = listOf(
+    var expenses = mutableListOf(
         Expense(
             id = 1,
             amount = 250.0,

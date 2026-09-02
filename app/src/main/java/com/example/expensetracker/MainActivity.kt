@@ -1,14 +1,17 @@
 package com.example.expensetracker
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.expensetracker.Util.SampleExpenses
 import com.example.expensetracker.adapter.ExpenseAdapter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var expenseAdapter: ExpenseAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,10 +20,21 @@ class MainActivity : AppCompatActivity() {
         val expenses = SampleExpenses.expenses
 
         val expenseRecyclerView = findViewById<RecyclerView>(R.id.expenseRecyclerView)
+        val addExpenseFab = findViewById<FloatingActionButton>(R.id.addExpenseFab)
+
+        expenseAdapter = ExpenseAdapter(expenses)
 
         expenseRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = ExpenseAdapter(expenses)
+            adapter = expenseAdapter
         }
+
+        addExpenseFab.setOnClickListener {
+            startActivity(Intent(this, ExpenseFormActivity::class.java))
+        }
+    }
+    override fun onResume() {
+        super.onResume()
+        expenseAdapter.notifyItemInserted(SampleExpenses.expenses.size - 1)
     }
 }
