@@ -35,6 +35,6 @@ class MainActivity : AppCompatActivity() {
     }
     override fun onResume() {
         super.onResume()
-        expenseAdapter.notifyItemInserted(SampleExpenses.expenses.size - 1)
+        expenseAdapter.notifyDataSetChanged()
     }
 }
