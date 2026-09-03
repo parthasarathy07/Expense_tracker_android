@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     private val startExpenseForm = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
+        result.data
         if (result.resultCode == RESULT_OK) {
             val expense = result.data?.getParcelableExtra<Expense>("expense")
             if (expense != null) {
@@ -38,7 +39,9 @@ class MainActivity : AppCompatActivity() {
         val expenseRecyclerView = findViewById<RecyclerView>(R.id.expenseRecyclerView)
         val addExpenseFab = findViewById<FloatingActionButton>(R.id.addExpenseFab)
 
-        expenseAdapter = ExpenseAdapter(expenses)
+        expenseAdapter = ExpenseAdapter(expenses){ expense ->
+            onClick(expense)
+        }
 
         expenseRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -48,6 +51,12 @@ class MainActivity : AppCompatActivity() {
         addExpenseFab.setOnClickListener {
             startExpenseForm.launch(Intent(this, ExpenseFormActivity::class.java))
         }
+    }
+    fun onClick(expense: Expense){
+        val intent = Intent(this, DetailActivity::class.java).apply {
+            putExtra("expense",expense)
+        }
+        startActivity(intent)
     }
 
     override fun onStart() {

@@ -5,12 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.expensetracker.R
 import com.example.expensetracker.model.Expense
 import java.time.format.DateTimeFormatter
 
-class ExpenseAdapter(private val expenses: List<Expense>) :
+class ExpenseAdapter(private val expenses: List<Expense>, private val onClick: (Expense) -> Unit) :
     RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseViewHolder {
@@ -28,6 +29,7 @@ class ExpenseAdapter(private val expenses: List<Expense>) :
         )
         holder.amountText.text = "₹" + String.format("%.2f", expense.amount)
         holder.receipt.setImageResource(R.drawable.img)
+        holder.itemView.setOnClickListener{onClick(expense)}
     }
 
     override fun getItemCount(): Int {
