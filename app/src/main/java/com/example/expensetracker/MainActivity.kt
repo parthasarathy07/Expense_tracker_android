@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.expense_list)
 
         val sampleExpenses = SampleExpenses()
         expenses = sampleExpenses.expenses

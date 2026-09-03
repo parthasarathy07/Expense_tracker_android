@@ -2,17 +2,17 @@ package com.example.expensetracker
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.expensetracker.databinding.ActivityDetailBinding
+import com.example.expensetracker.databinding.ExpenseDetailBinding
 import com.example.expensetracker.model.Expense
 import java.time.format.DateTimeFormatter
 
 class DetailActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityDetailBinding
+    private lateinit var binding: ExpenseDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityDetailBinding.inflate(layoutInflater)
+        binding = ExpenseDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val expense = intent.getParcelableExtra("expense", Expense::class.java)

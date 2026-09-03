@@ -10,11 +10,9 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import com.example.expensetracker.Util.SampleExpenses
 import com.example.expensetracker.model.Expense
 import com.example.expensetracker.model.Group
 import java.time.LocalDate
-import java.util.Calendar
 
 class ExpenseFormActivity : AppCompatActivity() {
 
@@ -22,7 +20,7 @@ class ExpenseFormActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_expense_form)
+        setContentView(R.layout.expense_form)
 
         val expenseReasonInput = findViewById<EditText>(R.id.expenseReasonInput)
         val expenseAmountInput = findViewById<EditText>(R.id.expenseAmountInput)

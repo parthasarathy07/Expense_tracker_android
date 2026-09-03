@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.expensetracker.R
 import com.example.expensetracker.model.Expense
@@ -15,7 +14,7 @@ class ExpenseAdapter(private val expenses: List<Expense>, private val onClick: (
     RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_expense_card, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.expense_item_card, parent, false)
         return ExpenseViewHolder(view)
     }
 
