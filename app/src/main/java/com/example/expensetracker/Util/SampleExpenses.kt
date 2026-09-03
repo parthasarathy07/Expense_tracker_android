@@ -3,7 +3,7 @@ import com.example.expensetracker.model.Expense
 import com.example.expensetracker.model.Group
 import java.time.LocalDate
 
-object SampleExpenses {
+class SampleExpenses {
 
     var expenses = mutableListOf(
         Expense(
@@ -77,4 +77,13 @@ object SampleExpenses {
             group = Group.EDUCATION
         )
     )
+
+    fun addExpense(expense: Expense) {
+        expenses.add(expense)
+    }
+
+    fun removeExpense(expense: Expense) {
+        expenses.remove(expense)
+    }
+
 }

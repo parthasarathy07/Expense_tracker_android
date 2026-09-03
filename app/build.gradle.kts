@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -20,11 +21,7 @@ android {
     }
 
     buildTypes {
-        release {
-            optimization {
-                enable = false
-            }
-        }
+        release {}
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

@@ -5,6 +5,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.ArrayAdapter
@@ -53,7 +54,9 @@ class ExpenseFormActivity : AppCompatActivity() {
                         group = Group.valueOf(selectedCategory)
                     )
 
-                    SampleExpenses.expenses.add(expense)
+                    val resultIntent = Intent()
+                    resultIntent.putExtra("expense", expense)
+                    setResult(RESULT_OK, resultIntent)
                     Toast.makeText(this, "Expense added!", Toast.LENGTH_SHORT).show()
 
                     finish()
