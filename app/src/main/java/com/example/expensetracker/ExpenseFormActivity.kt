@@ -33,7 +33,19 @@ class ExpenseFormActivity : AppCompatActivity() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         expenseCategorySpinner.adapter = adapter
 
-        // Date picker
+        val expense = intent.getParcelableExtra("expense", Expense::class.java)
+
+        expense?.let{
+            expenseReasonInput.setText(it.reason)
+            expenseAmountInput.setText(it.amount.toString())
+            expenseCategorySpinner.setSelection(
+                categories.indexOf(it.group.name)
+            )
+            selectedDate = it.date
+            datePickerButton.text = "Date: ${it.date.dayOfMonth}/${it.date.monthValue}/${it.date.year}"
+            submitButton.text = "Update"
+        }
+
         datePickerButton.setOnClickListener {
             showDatePicker()
         }
@@ -45,17 +57,18 @@ class ExpenseFormActivity : AppCompatActivity() {
 
             if (reason.isNotEmpty() && amount.isNotEmpty()) {
                 try {
-                    val expense = Expense(
+                    val newExpense = Expense(
                         amount = amount.toDouble(),
                         date = selectedDate,
                         reason = reason,
                         group = Group.valueOf(selectedCategory)
-                    )
+                    ).apply {
+                        expense?.let { this.id = it.id }
+                    }
 
                     val resultIntent = Intent()
-                    resultIntent.putExtra("expense", expense)
+                    resultIntent.putExtra("expense", newExpense)
                     setResult(RESULT_OK, resultIntent)
-                    Toast.makeText(this, "Expense added!", Toast.LENGTH_SHORT).show()
 
                     finish()
                 } catch (e: Exception) {

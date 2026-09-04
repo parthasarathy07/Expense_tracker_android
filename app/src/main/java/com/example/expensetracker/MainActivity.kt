@@ -28,6 +28,21 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+    private val startDetailPage = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        result.data
+        if (result.resultCode == RESULT_OK) {
+            val updatedExpense = result.data?.getParcelableExtra<Expense>("updated_expense")
+            if (updatedExpense != null) {
+                val index = expenses.indexOfFirst { it.id == updatedExpense.id }
+                if (index != -1) {
+                    expenses[index] = updatedExpense
+                    expenseAdapter.notifyItemChanged(index)
+                }
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +71,7 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, DetailActivity::class.java).apply {
             putExtra("expense",expense)
         }
-        startActivity(intent)
+        startDetailPage.launch(intent)
     }
 
     override fun onStart() {
