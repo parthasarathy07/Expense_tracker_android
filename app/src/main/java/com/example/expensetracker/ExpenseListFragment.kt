@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.expensetracker.Util.ExpenseDatabase
 import com.example.expensetracker.adapter.ExpenseAdapter
 import com.example.expensetracker.databinding.FragmentExpenseListBinding
 import com.example.expensetracker.model.Expense
@@ -25,6 +26,8 @@ class ExpenseListFragment : Fragment(R.layout.fragment_expense_list) {
     private var isTablet = false
     private var isLandscape = false
 
+    private lateinit var db: ExpenseDatabase
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +40,7 @@ class ExpenseListFragment : Fragment(R.layout.fragment_expense_list) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        db = ExpenseDatabase(requireContext())
 
         isTablet = resources.getBoolean(R.bool.is_tablet)
         isLandscape = resources.getBoolean(R.bool.is_landscape)
@@ -45,10 +49,16 @@ class ExpenseListFragment : Fragment(R.layout.fragment_expense_list) {
             binding.toolbar.updatePadding(top = 0)
         }
 
-        val mainActivity = activity as MainActivity
-        expenses = mainActivity.expenses
+        expenses = db.getAllExpenses()
 
-        setupRecyclerView()
+        if (expenses.isEmpty()) {
+            binding.expenseRecyclerView.visibility = View.GONE
+            binding.empty.visibility = View.VISIBLE
+        } else {
+            setupRecyclerView()
+            binding.expenseRecyclerView.visibility = View.VISIBLE
+            binding.empty.visibility = View.GONE
+        }
         setupFab()
     }
     private fun setupFab(){

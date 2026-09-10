@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
+import com.example.expensetracker.Util.ExpenseDatabase
 import com.example.expensetracker.databinding.ExpenseFormBinding
 import com.example.expensetracker.model.Expense
 import com.example.expensetracker.model.Group
@@ -23,7 +24,10 @@ class ExpenseFormFragment : Fragment() {
     private var selectedDate = LocalDate.now()
     private var expenseToEdit: Expense? = null
 
-    private var onExpenseSubmitListener: ((Expense) -> Unit)? = null
+    private var isTablet = false
+    private var isLandscape = false
+
+    private lateinit var db: ExpenseDatabase
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,6 +40,10 @@ class ExpenseFormFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        db = ExpenseDatabase(requireContext())
+        isTablet = resources.getBoolean(R.bool.is_tablet)
+        isLandscape = resources.getBoolean(R.bool.is_landscape)
 
         setupCategorySpinner()
 
@@ -86,7 +94,7 @@ class ExpenseFormFragment : Fragment() {
                 expenseToEdit?.let { this.id = it.id }
             }
 
-            onExpenseSubmitListener?.invoke(newExpense)
+            expenseSubmitListener(newExpense)
         } catch (e: Exception) {
             Toast.makeText(requireContext(), "Invalid amount", Toast.LENGTH_SHORT).show()
         }
@@ -104,5 +112,39 @@ class ExpenseFormFragment : Fragment() {
             selectedDate.dayOfMonth
         )
         datePickerDialog.show()
+    }
+    fun expenseSubmitListener(newExpense: Expense){
+        parentFragmentManager.popBackStack()
+
+        if(expenseToEdit == null){
+            db.insertExpense(newExpense)
+
+            val expenseDetailFragment = ExpenseDetailFragment.newInstance()
+
+            val args = Bundle().apply {
+                putParcelable("expense", newExpense)
+            }
+            expenseDetailFragment.arguments = args
+
+            replace(expenseDetailFragment)
+
+        }else{
+            db.updateExpense(newExpense)
+        }
+    }
+
+    private fun replace(fragment: Fragment) {
+
+        parentFragmentManager.beginTransaction().apply {
+
+            if( isTablet || isLandscape ){
+                replace(R.id.tab_fragment_container, fragment)
+            }else{
+                replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+            }
+
+            commit()
+        }
     }
 }

@@ -7,7 +7,6 @@ import com.example.expensetracker.Util.SampleExpenses
 import com.example.expensetracker.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    var expenses = SampleExpenses().expenses
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

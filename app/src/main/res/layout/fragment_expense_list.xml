@@ -36,6 +36,13 @@
             android:paddingBottom="85dp"
             tools:ignore="RtlSymmetry" />
 
+        <TextView
+            android:id="@android:id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/no_data_available" />
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addExpenseFab"
             android:layout_width="wrap_content"
