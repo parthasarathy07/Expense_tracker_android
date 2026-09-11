@@ -33,6 +33,14 @@ class ExpenseDetailFragment : Fragment(R.layout.fragment_expense_detail) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        parentFragmentManager.setFragmentResultListener("expense_detail_updated", viewLifecycleOwner) { _, bundle ->
+            val updatedExpense = bundle.getParcelable<Expense>("expense")
+            if (updatedExpense != null && updatedExpense.id == this.expense.id) {
+                displayExpenseDetails(updatedExpense)
+                this.expense = updatedExpense
+            }
+        }
+
         val newExpense = arguments?.getParcelable<Expense>("expense")
         newExpense?.let {
             displayExpenseDetails(it)
@@ -81,8 +89,8 @@ class ExpenseDetailFragment : Fragment(R.layout.fragment_expense_detail) {
                 replace(R.id.tab_fragment_container, fragment)
             }else{
                 replace(R.id.fragment_container, fragment)
+                addToBackStack(null)
             }
-            addToBackStack(null)
             commit()
         }
     }

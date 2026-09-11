@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.setFragmentResult
 import com.example.expensetracker.Util.ExpenseDatabase
 import com.example.expensetracker.databinding.ExpenseFormBinding
 import com.example.expensetracker.model.Expense
@@ -114,22 +115,33 @@ class ExpenseFormFragment : Fragment() {
         datePickerDialog.show()
     }
     fun expenseSubmitListener(newExpense: Expense){
-        parentFragmentManager.popBackStack()
-
         if(expenseToEdit == null){
             db.insertExpense(newExpense)
-
-            val expenseDetailFragment = ExpenseDetailFragment.newInstance()
-
-            val args = Bundle().apply {
-                putParcelable("expense", newExpense)
-            }
-            expenseDetailFragment.arguments = args
-
-            replace(expenseDetailFragment)
-
         }else{
             db.updateExpense(newExpense)
+        }
+
+        val result = Bundle().apply {
+            putParcelable("expense", newExpense)
+        }
+        setFragmentResult("expense_list_updated", result)
+        setFragmentResult("expense_detail_updated", result)
+
+        if (isTablet || isLandscape) {
+            val detailFragment = ExpenseDetailFragment.newInstance()
+            detailFragment.arguments = Bundle().apply {
+                putParcelable("expense", newExpense)
+            }
+            replace(detailFragment)
+        } else {
+            parentFragmentManager.popBackStack()
+            if (expenseToEdit == null) {
+                val detailFragment = ExpenseDetailFragment.newInstance()
+                detailFragment.arguments = Bundle().apply {
+                    putParcelable("expense", newExpense)
+                }
+                replace(detailFragment)
+            }
         }
     }
 

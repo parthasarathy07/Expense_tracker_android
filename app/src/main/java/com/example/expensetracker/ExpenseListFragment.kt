@@ -42,6 +42,10 @@ class ExpenseListFragment : Fragment(R.layout.fragment_expense_list) {
         super.onViewCreated(view, savedInstanceState)
         db = ExpenseDatabase(requireContext())
 
+        parentFragmentManager.setFragmentResultListener("expense_list_updated", viewLifecycleOwner) { _, _ ->
+            refreshList()
+        }
+
         isTablet = resources.getBoolean(R.bool.is_tablet)
         isLandscape = resources.getBoolean(R.bool.is_landscape)
 
@@ -49,6 +53,11 @@ class ExpenseListFragment : Fragment(R.layout.fragment_expense_list) {
             binding.toolbar.updatePadding(top = 0)
         }
 
+        refreshList()
+        setupFab()
+    }
+
+    private fun refreshList() {
         expenses = db.getAllExpenses()
 
         if (expenses.isEmpty()) {
@@ -59,8 +68,8 @@ class ExpenseListFragment : Fragment(R.layout.fragment_expense_list) {
             binding.expenseRecyclerView.visibility = View.VISIBLE
             binding.empty.visibility = View.GONE
         }
-        setupFab()
     }
+
     private fun setupFab(){
         binding.addExpenseFab.setOnClickListener {
             val formFragment = ExpenseFormFragment.newInstance()
