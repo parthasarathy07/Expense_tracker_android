@@ -1,7 +1,9 @@
 package com.example.expensetracker
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import com.example.expensetracker.Util.SampleExpenses
 import com.example.expensetracker.databinding.ActivityMainBinding
@@ -15,6 +17,11 @@ class MainActivity : AppCompatActivity() {
 
         val isTablet = resources.getBoolean(R.bool.is_tablet)
         val isLandscape = resources.getBoolean(R.bool.is_landscape)
+
+        val prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val savedMode = prefs.getInt("theme_mode", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+
+        AppCompatDelegate.setDefaultNightMode(savedMode)
 
         if(isLandscape||isTablet){
             attach(ExpenseListFragment.newInstance(),R.id.list_pane)

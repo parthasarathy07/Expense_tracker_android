@@ -1,5 +1,7 @@
 package com.example.expensetracker
 
+import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +17,7 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import java.util.Locale
+import androidx.core.content.edit
 
 class ExpenseListFragment : Fragment(R.layout.fragment_expense_list) {
     companion object {
@@ -53,13 +56,40 @@ class ExpenseListFragment : Fragment(R.layout.fragment_expense_list) {
         isTablet = resources.getBoolean(R.bool.is_tablet)
         isLandscape = resources.getBoolean(R.bool.is_landscape)
 
-        if(isTablet || isLandscape){
-            binding.toolbar.updatePadding(top = 0)
-        }
 
         refreshList()
         setupFab()
         setupLanguageDropdown()
+        setupThemeToggle()
+    }
+
+    private fun setupThemeToggle() {
+        val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+
+        val currentNightMode = AppCompatDelegate.getDefaultNightMode()
+        val isDarkMode = when (currentNightMode) {
+            AppCompatDelegate.MODE_NIGHT_YES -> true
+            AppCompatDelegate.MODE_NIGHT_NO -> false
+            else -> (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+        }
+
+        binding.themeToggleButton.text = if (isDarkMode) {
+            getString(R.string.switch_to_light_mode)
+        } else {
+            getString(R.string.switch_to_dark_mode)
+        }
+
+        binding.themeToggleButton.setOnClickListener {
+            val newMode = if (isDarkMode) {
+                AppCompatDelegate.MODE_NIGHT_NO
+            } else {
+                AppCompatDelegate.MODE_NIGHT_YES
+            }
+
+            AppCompatDelegate.setDefaultNightMode(newMode)
+
+            prefs.edit { putInt("theme_mode", newMode) }
+        }
     }
 
     private fun refreshList() {

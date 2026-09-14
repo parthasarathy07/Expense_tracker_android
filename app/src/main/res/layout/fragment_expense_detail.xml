@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5"
     android:orientation="vertical">
     <TextView
         android:id="@+id/toolbar"
@@ -12,24 +11,25 @@
         android:text="@string/expense_details"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="#000000"
-        android:padding="20dp"
-        android:background="@color/material_dynamic_neutral50"/>
+        android:textColor="?attr/colorOnSurface"
+        android:padding="20dp"/>
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:background="?attr/colorSurface">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:cardBackgroundColor="#FFFFFF">
+            android:background="?attr/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="24dp">
+                android:padding="24dp"
+                android:background="?attr/colorSurface">
 
 
                 <LinearLayout
@@ -45,7 +45,6 @@
                         android:layout_height="80dp"
                         android:layout_marginEnd="16dp"
                         android:scaleType="centerCrop"
-                        android:background="#F0F0F0"
                         android:contentDescription="@string/receipt_image" />
 
                     <LinearLayout
@@ -61,7 +60,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="18sp"
                             android:textStyle="bold"
-                            android:textColor="#000000"
+                            android:textColor="?attr/colorOnSurface"
                             android:layout_marginBottom="8dp"
                             android:maxLines="2"
                             android:ellipsize="end" />
@@ -71,7 +70,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/Amount"
                             android:textSize="12sp"
-                            android:textColor="#A0A0A0"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:layout_marginBottom="4dp" />
 
                         <TextView
@@ -80,14 +79,13 @@
                             android:layout_height="wrap_content"
                             android:textSize="22sp"
                             android:textStyle="bold"
-                            android:textColor="#2196F3" />
+                            android:textColor="?attr/colorPrimary" />
                     </LinearLayout>
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#EFEFEF"
                     android:layout_marginBottom="20dp" />
 
                 <LinearLayout
@@ -108,7 +106,7 @@
                             android:layout_weight="1"
                             android:text="@string/Category"
                             android:textSize="14sp"
-                            android:textColor="#A0A0A0" />
+                            android:textColor="?attr/colorOnSurfaceVariant" />
 
                         <TextView
                             android:id="@+id/categoryDetailText"
@@ -116,7 +114,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
                             android:textStyle="bold"
-                            android:textColor="#000000" />
+                            android:textColor="?attr/colorOnSurface" />
                     </LinearLayout>
 
                     <!-- Date Detail -->
@@ -132,7 +130,7 @@
                             android:layout_weight="1"
                             android:text="@string/Date"
                             android:textSize="14sp"
-                            android:textColor="#A0A0A0" />
+                            android:textColor="?attr/colorOnSurfaceVariant" />
 
                         <TextView
                             android:id="@+id/dateDetailText"
@@ -140,7 +138,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
                             android:textStyle="bold"
-                            android:textColor="#000000" />
+                            android:textColor="?attr/colorOnSurface" />
                     </LinearLayout>
 
                     <!-- Description Detail -->
@@ -155,7 +153,7 @@
                             android:layout_weight="1"
                             android:text="@string/Description"
                             android:textSize="14sp"
-                            android:textColor="#A0A0A0" />
+                            android:textColor="?attr/colorOnSurfaceVariant" />
 
                         <TextView
                             android:id="@+id/descriptionDetailText"
@@ -163,7 +161,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
                             android:textStyle="bold"
-                            android:textColor="#000000" />
+                            android:textColor="?attr/colorOnSurface" />
                     </LinearLayout>
                 </LinearLayout>
                 <Button
@@ -173,7 +171,7 @@
                     android:text="@string/Edit"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="#FFFFFF"
+                    android:textColor="?attr/colorOnPrimary"
                     android:layout_marginTop="24dp" />
 
             </LinearLayout>

@@ -17,4 +17,6 @@
     <string name="Edit">திருத்து</string>
     <string name="add_expense">செலவைச் சேர்</string>
     <string name="create">உருவாக்கு</string>
+    <string name="switch_to_light_mode">ஒளி பயன்முறைக்கு மாறவும்</string>
+    <string name="switch_to_dark_mode">இருண்ட பயன்முறைக்கு மாறவும்</string>
 </resources>

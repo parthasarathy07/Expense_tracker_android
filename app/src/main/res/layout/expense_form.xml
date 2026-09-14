@@ -10,7 +10,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F5F5F5"
         android:orientation="vertical">
         <TextView
             android:id="@+id/toolbar"
@@ -19,9 +18,8 @@
             android:text="@string/expense_form"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="#000000"
-            android:padding="20dp"
-            android:background="@color/material_dynamic_neutral50"/>
+            android:textColor="?attr/colorOnSurface"
+            android:padding="20dp" />
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -30,8 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="16dp"
-                android:background="#F5F5F5">
+                android:padding="16dp">
 
                 <EditText
                     android:id="@+id/expenseReasonInput"

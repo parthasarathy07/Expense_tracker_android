@@ -17,4 +17,6 @@
     <string name="Edit">編集</string>
     <string name="add_expense">支出を追加</string>
     <string name="create">作成</string>
+    <string name="switch_to_light_mode">ライトモードに切り替え</string>
+    <string name="switch_to_dark_mode">ダークモードに切り替え</string>
 </resources>

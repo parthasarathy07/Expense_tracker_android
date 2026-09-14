@@ -50,9 +50,6 @@ class ExpenseDetailFragment : Fragment(R.layout.fragment_expense_detail) {
         isTablet = resources.getBoolean(R.bool.is_tablet)
         isLandscape = resources.getBoolean(R.bool.is_landscape)
 
-        if(isTablet || isLandscape){
-            binding.toolbar.updatePadding(top = 0)
-        }
 
         binding.editButton.setOnClickListener {
             expense.let { expenseToEdit ->
