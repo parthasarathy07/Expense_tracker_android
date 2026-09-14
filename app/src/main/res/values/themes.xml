@@ -4,9 +4,7 @@
 <!--</resources>-->
 <resources>
 
-    <style name="Theme.ExpenseTracker"
-        parent="Theme.AppCompat.Light.NoActionBar" />
-
+    <style name="Theme.ExpenseTracker" parent="Theme.Material3.DayNight.NoActionBar" />
 </resources>
 
 <!--<resources>-->

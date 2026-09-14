@@ -11,6 +11,10 @@ import com.example.expensetracker.Util.ExpenseDatabase
 import com.example.expensetracker.adapter.ExpenseAdapter
 import com.example.expensetracker.databinding.FragmentExpenseListBinding
 import com.example.expensetracker.model.Expense
+import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
+import java.util.Locale
 
 class ExpenseListFragment : Fragment(R.layout.fragment_expense_list) {
     companion object {
@@ -55,6 +59,7 @@ class ExpenseListFragment : Fragment(R.layout.fragment_expense_list) {
 
         refreshList()
         setupFab()
+        setupLanguageDropdown()
     }
 
     private fun refreshList() {
@@ -74,6 +79,37 @@ class ExpenseListFragment : Fragment(R.layout.fragment_expense_list) {
         binding.addExpenseFab.setOnClickListener {
             val formFragment = ExpenseFormFragment.newInstance()
             replace(formFragment)
+        }
+    }
+
+    private fun setupLanguageDropdown() {
+        val languages = resources.getStringArray(R.array.languages)
+        val languageCodes = resources.getStringArray(R.array.language_codes)
+
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, languages)
+        binding.languageDropdown.setAdapter(adapter)
+
+        val currentLocale = AppCompatDelegate.getApplicationLocales().get(0)?.language
+            ?: Locale.getDefault().language
+        val index = languageCodes.indexOf(currentLocale)
+
+        if (index != -1) {
+            binding.languageDropdown.setText(languages[index], false)
+        }
+
+        binding.languageDropdown.setOnClickListener {
+            adapter.filter.filter(null)
+        }
+
+        binding.languageDropdown.setOnItemClickListener { parent, _, position, _ ->
+            val selectedLanguage = parent.getItemAtPosition(position) as String
+            val selectedIndex = languages.indexOf(selectedLanguage)
+
+            if (selectedIndex != -1) {
+                val selectedLocale = languageCodes[selectedIndex]
+                val appLocale = LocaleListCompat.forLanguageTags(selectedLocale)
+                AppCompatDelegate.setApplicationLocales(appLocale)
+            }
         }
     }
 

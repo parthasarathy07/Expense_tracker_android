@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ExpenseTracker</string>
+    <string name="no_data_available">支出が追加されていません</string>
+    <string name="expense_form">支出フォーム</string>
+    <string name="expense_reason_description">支出の理由・説明</string>
+    <string name="amount">金額</string>
+    <string name="select_date">日付を選択</string>
+    <string name="submit">送信</string>
+    <string name="no_image">画像なし</string>
+    <string name="expense_details">支出の詳細</string>
+    <string name="receipt_image">領収書の画像</string>
+    <string name="Amount">金額</string>
+    <string name="Category">カテゴリー</string>
+    <string name="Date">日付</string>
+    <string name="Description">説明</string>
+    <string name="Edit">編集</string>
+    <string name="add_expense">支出を追加</string>
+    <string name="create">作成</string>
+</resources>

@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.expensetracker"
-        minSdk = 27
+        minSdk = 33
         targetSdk = 37
         versionCode = 1
         versionName = "1.0"

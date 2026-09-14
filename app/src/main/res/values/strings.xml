@@ -1,4 +1,31 @@
 <resources>
     <string name="app_name">ExpenseTracker</string>
     <string name="no_data_available">No Expenses Added</string>
+    <string name="expense_form">Expense Form</string>
+    <string name="expense_reason_description">Expense reason/description</string>
+    <string name="amount">Amount</string>
+    <string name="select_date">Select Date</string>
+    <string name="submit">Submit</string>
+    <string name="no_image">No image</string>
+    <string name="expense_details">Expense Details</string>
+    <string name="receipt_image">Receipt image</string>
+    <string name="Amount">Amount</string>
+    <string name="Category">Category</string>
+    <string name="Date">Date</string>
+    <string name="Description">Description</string>
+    <string name="Edit">Edit</string>
+    <string name="add_expense">Add expense</string>
+    <string name="create">Create</string>
+
+    <string-array name="languages">
+        <item>English</item>
+        <item>Japanese</item>
+        <item>Tamil</item>
+    </string-array>
+
+    <string-array name="language_codes">
+        <item>en</item>
+        <item>ja</item>
+        <item>ta</item>
+    </string-array>
 </resources>

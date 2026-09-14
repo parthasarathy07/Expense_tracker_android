@@ -40,7 +40,7 @@
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="12dp"
-                android:contentDescription="No image" />
+                android:contentDescription="@string/no_image" />
 
             <TextView
                 android:id="@+id/reasonText"
