@@ -32,9 +32,20 @@ android {
         viewBinding = true
         dataBinding = true
     }
+    testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
+            it.systemProperty("net.bytebuddy.experimental", "true")
+        }
+    }
 }
 
 dependencies {
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.0")
+
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.1.0")
     implementation(libs.androidx.fragment.ktx)
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.recyclerview:recyclerview:1.3.0")

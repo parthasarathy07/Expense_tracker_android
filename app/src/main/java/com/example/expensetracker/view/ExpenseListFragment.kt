@@ -1,4 +1,4 @@
-package com.example.expensetracker
+package com.example.expensetracker.view
 
 import android.content.Context
 import android.content.res.Configuration
@@ -6,20 +6,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.updatePadding
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.expensetracker.Util.ExpenseDatabase
-import com.example.expensetracker.adapter.ExpenseAdapter
-import com.example.expensetracker.databinding.FragmentExpenseListBinding
-import com.example.expensetracker.model.Expense
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.expensetracker.ExpenseDetailFragment
+import com.example.expensetracker.ExpenseFormFragment
+import com.example.expensetracker.R
+import com.example.expensetracker.adapter.ExpenseAdapter
+import com.example.expensetracker.contract.ExpenseListContract
+import com.example.expensetracker.databinding.FragmentExpenseListBinding
+import com.example.expensetracker.model.Expense
+import com.example.expensetracker.model.ExpenseDatabase
+import com.example.expensetracker.presenter.ExpenseListPresenter
 import java.util.Locale
-import androidx.core.content.edit
 
-class ExpenseListFragment : Fragment(R.layout.fragment_expense_list) {
+class ExpenseListFragment : Fragment(R.layout.fragment_expense_list), ExpenseListContract.View {
+
     companion object {
         fun newInstance(): ExpenseListFragment {
             return ExpenseListFragment()
@@ -27,14 +30,10 @@ class ExpenseListFragment : Fragment(R.layout.fragment_expense_list) {
     }
 
     private lateinit var binding: FragmentExpenseListBinding
-    private lateinit var adapter: ExpenseAdapter
-    private lateinit var expenses:List<Expense>
+    private lateinit var presenter: ExpenseListContract.Presenter
 
     private var isTablet = false
     private var isLandscape = false
-
-    private lateinit var db: ExpenseDatabase
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,24 +46,17 @@ class ExpenseListFragment : Fragment(R.layout.fragment_expense_list) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        db = ExpenseDatabase(requireContext())
 
-        parentFragmentManager.setFragmentResultListener("expense_list_updated", viewLifecycleOwner) { _, _ ->
-            refreshList()
-        }
+        val db = ExpenseDatabase(requireContext())
+        val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        presenter = ExpenseListPresenter(this, db, prefs)
 
         isTablet = resources.getBoolean(R.bool.is_tablet)
         isLandscape = resources.getBoolean(R.bool.is_landscape)
 
-
-        refreshList()
-        setupFab()
-        setupLanguageDropdown()
-        setupThemeToggle()
-    }
-
-    private fun setupThemeToggle() {
-        val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        parentFragmentManager.setFragmentResultListener("expense_list_updated", viewLifecycleOwner) { _, _ ->
+            presenter.loadExpenses()
+        }
 
         val currentNightMode = AppCompatDelegate.getDefaultNightMode()
         val isDarkMode = when (currentNightMode) {
@@ -73,42 +65,66 @@ class ExpenseListFragment : Fragment(R.layout.fragment_expense_list) {
             else -> (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
         }
 
+        updateThemeButtonText(isDarkMode)
+        presenter.loadExpenses()
+
+
+        setupFab()
+        setupLanguageDropdown()
+        setupThemeToggle(isDarkMode)
+    }
+
+    override fun showExpenses(expenses: List<Expense>) {
+        binding.expenseRecyclerView.visibility = View.VISIBLE
+        binding.empty.visibility = View.GONE
+
+        binding.expenseRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = ExpenseAdapter(expenses) { expense ->
+                presenter.onExpenseClicked(expense)
+            }
+        }
+    }
+
+    override fun showEmptyState() {
+        binding.expenseRecyclerView.visibility = View.GONE
+        binding.empty.visibility = View.VISIBLE
+    }
+
+    override fun updateThemeButtonText(isDarkMode: Boolean) {
         binding.themeToggleButton.text = if (isDarkMode) {
             getString(R.string.switch_to_light_mode)
         } else {
             getString(R.string.switch_to_dark_mode)
         }
+    }
 
+    override fun setSelectedLanguage(languageName: String) {
+        binding.languageDropdown.setText(languageName, false)
+    }
+
+    override fun navigateToForm(isTabletOrLandscape: Boolean) {
+        val formFragment = ExpenseFormFragment.newInstance()
+        replaceFragment(formFragment)
+    }
+
+    override fun navigateToDetail(expense: Expense, isTabletOrLandscape: Boolean) {
+        val expenseDetailFragment = ExpenseDetailFragment.newInstance()
+        expenseDetailFragment.arguments = Bundle().apply {
+            putParcelable("expense", expense)
+        }
+        replaceFragment(expenseDetailFragment)
+    }
+
+    private fun setupThemeToggle(isDarkMode: Boolean) {
         binding.themeToggleButton.setOnClickListener {
-            val newMode = if (isDarkMode) {
-                AppCompatDelegate.MODE_NIGHT_NO
-            } else {
-                AppCompatDelegate.MODE_NIGHT_YES
-            }
-
-            AppCompatDelegate.setDefaultNightMode(newMode)
-
-            prefs.edit { putInt("theme_mode", newMode) }
+            presenter.onThemeToggleClicked(isDarkMode)
         }
     }
 
-    private fun refreshList() {
-        expenses = db.getAllExpenses()
-
-        if (expenses.isEmpty()) {
-            binding.expenseRecyclerView.visibility = View.GONE
-            binding.empty.visibility = View.VISIBLE
-        } else {
-            setupRecyclerView()
-            binding.expenseRecyclerView.visibility = View.VISIBLE
-            binding.empty.visibility = View.GONE
-        }
-    }
-
-    private fun setupFab(){
+    private fun setupFab() {
         binding.addExpenseFab.setOnClickListener {
-            val formFragment = ExpenseFormFragment.newInstance()
-            replace(formFragment)
+            presenter.onAddExpenseClicked()
         }
     }
 
@@ -124,7 +140,7 @@ class ExpenseListFragment : Fragment(R.layout.fragment_expense_list) {
         val index = languageCodes.indexOf(currentLocale)
 
         if (index != -1) {
-            binding.languageDropdown.setText(languages[index], false)
+            setSelectedLanguage(languages[index])
         }
 
         binding.languageDropdown.setOnClickListener {
@@ -136,46 +152,21 @@ class ExpenseListFragment : Fragment(R.layout.fragment_expense_list) {
             val selectedIndex = languages.indexOf(selectedLanguage)
 
             if (selectedIndex != -1) {
-                val selectedLocale = languageCodes[selectedIndex]
-                val appLocale = LocaleListCompat.forLanguageTags(selectedLocale)
-                AppCompatDelegate.setApplicationLocales(appLocale)
+                presenter.onLanguageSelected(selectedIndex, languageCodes[selectedIndex])
             }
         }
     }
 
-    private fun setupRecyclerView() {
-        adapter = ExpenseAdapter(expenses) { expense ->
-            onClick(expense)
-        }
 
-        binding.expenseRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = this@ExpenseListFragment.adapter
-        }
-    }
-    fun onClick(expense: Expense){
 
-        val expenseDetailFragment = ExpenseDetailFragment.newInstance()
-
-        val args = Bundle().apply {
-            putParcelable("expense", expense)
-        }
-        expenseDetailFragment.arguments = args
-
-        replace(expenseDetailFragment)
-    }
-
-    private fun replace(fragment: Fragment) {
-
+    private fun replaceFragment(fragment: Fragment) {
         parentFragmentManager.beginTransaction().apply {
-
-            if( isTablet || isLandscape ){
+            if (isTablet || isLandscape) {
                 replace(R.id.tab_fragment_container, fragment)
-            }else{
+            } else {
                 replace(R.id.fragment_container, fragment)
                 addToBackStack(null)
             }
-
             commit()
         }
     }

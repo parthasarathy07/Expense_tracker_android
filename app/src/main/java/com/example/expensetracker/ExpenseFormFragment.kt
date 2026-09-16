@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.setFragmentResult
-import com.example.expensetracker.Util.ExpenseDatabase
+import com.example.expensetracker.model.ExpenseDatabase
 import com.example.expensetracker.databinding.ExpenseFormBinding
 import com.example.expensetracker.model.Expense
 import com.example.expensetracker.model.Group

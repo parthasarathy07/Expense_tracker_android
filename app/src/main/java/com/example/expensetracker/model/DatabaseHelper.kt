@@ -1,11 +1,9 @@
-package com.example.expensetracker.Util
+package com.example.expensetracker.model
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.example.expensetracker.model.Expense
-import com.example.expensetracker.model.Group
 import java.time.LocalDate
 
 class ExpenseDatabase(context: Context) :
