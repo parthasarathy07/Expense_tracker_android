@@ -1,5 +1,6 @@
 package com.example.expensetracker.view
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -27,6 +28,18 @@ class MainActivity : AppCompatActivity() {
         if(isLandscape||isTablet){
             attach(ExpenseListFragment.newInstance(), R.id.list_pane)
             attach(FormButtonFragment.newInstance(), R.id.tab_fragment_container)
+        }
+
+        val cursor = contentResolver.query(
+                Uri.parse("content://com.invoice_crud_android.provider/invoices"),
+        null,null,null,null,
+        )
+
+        cursor?.use {
+            while (it.moveToNext()) {
+                val id = it.getInt(it.getColumnIndexOrThrow("_id"))
+                val name = it.getString(it.getColumnIndexOrThrow("name"))
+            }
         }
     }
 
